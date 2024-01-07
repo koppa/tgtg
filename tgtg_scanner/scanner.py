@@ -145,7 +145,10 @@ class Scanner:
             if state_item.items_available == item.items_available:
                 return
             log.info("%s - new amount: %s", item.display_name, item.items_available)
-            if state_item.items_available == 0 and item.items_available > 0:
+            if (state_item.items_available == 0 and
+                item.items_available > 0 and
+                float(state_item.price) < float(state_item.value) / (1/3)):
+
                 self._send_messages(item)
                 self.metrics.send_notifications.labels(item.item_id, item.display_name).inc()
         self.metrics.update(item)
